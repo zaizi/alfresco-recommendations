@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<artifactId>zaizi-recommendations-dashlet</artifactId>
+		<groupId>org.zaizi.alfresco</groupId>
+		<version>1.0</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>recommendations-dashlet-share</artifactId>
+	<name>Alfresco Recommendations Module - Visualization Dashlet </name>
+	<description>Alfresco Mahout Integration
+        Visualization dashlet on share for see recommended documents.
+    </description>
+	<packaging>amp</packaging>
+
+	<organization>
+		<name>Zaizi Ltd.</name>
+		<url>http://www.zaizi.com</url>
+	</organization>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.alfresco</groupId>
+			<artifactId>share</artifactId>
+			<version>${alfresco.version}</version>
+			<type>war</type>
+			<scope>runtime</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<finalName>${project.artifactId}-${project.version}</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-nosnapshot-plugin</artifactId>
+				<groupId>com.sourcesense.maven</groupId>
+				<version>${maven.plugin.nosnapshot.version}</version>
+				<executions>
+					<execution>
+						<id>default</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>strip</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.plugin.compiler.version}</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.alfresco.maven.plugin</groupId>
+				<artifactId>maven-amp-plugin</artifactId>
+				<version>${maven.plugin.amp.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+					</archive>
+					<overlays>
+					</overlays>
+				</configuration>
+			</plugin>
+		</plugins>
+		<!-- Copies and filters resources in build folder so maven-amp-plugin can 
+			pick them up -->
+		<resources>
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>**README-*</exclude>
+				</excludes>
+			</resource>
+			<!-- Copies and filters AMP config in the proper package 'alfresco/module/alfresco-ranking-module' 
+				so to enforce full module naming single sourcing from POM properties -->
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/config</directory>
+				<targetPath>alfresco/module/${project.artifactId}</targetPath>
+				<excludes>
+					<exclude>**README-*</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											com.sourcesense.maven
+										</groupId>
+										<artifactId>
+											maven-nosnapshot-plugin
+										</artifactId>
+										<versionRange>
+											[0.0.5,)
+										</versionRange>
+										<goals>
+											<goal>strip</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+</project>

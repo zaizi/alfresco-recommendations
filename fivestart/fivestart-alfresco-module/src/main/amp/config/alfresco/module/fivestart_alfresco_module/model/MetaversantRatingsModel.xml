@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+   Copyright 2011, Jeff Potts
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+  -->
+<!-- Metaversant Ratings Content Model -->
+<model name="mr:ratingsmodel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<description>Metaversant Five Star Ratings Content Model</description>
+	<author>Metaversant, Jeff Potts</author>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d" />
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+		<import uri="http://www.alfresco.org/model/datalist/1.0" prefix="dl" />
+		<import uri="http://www.alfresco.org/model/system/1.0" prefix="sys" />
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.metaversant.com/model/ratings/1.0" prefix="mr" />
+	</namespaces>
+
+	<types>
+		<type name="mr:rating">
+			<title>Rating</title>
+			<parent>sys:base</parent>
+			<properties>
+				<property name="mr:rating">					
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="mr:rater">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</type>
+	</types>
+
+	<aspects>
+		<aspect name="mr:rateable">
+			<title>Metaversant Rateable</title>
+			<properties>
+				<property name="mr:averageRating">
+					<type>d:double</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="mr:totalRating">
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="mr:ratingCount">
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+				</property>
+			</properties>
+			<associations>
+				<child-association name="mr:ratings">
+					<title>Rating</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>mr:rating</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</child-association>
+			</associations>
+		</aspect>
+	</aspects>
+</model>

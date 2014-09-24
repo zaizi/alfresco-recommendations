@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with 
+	this work for additional information regarding copyright ownership. The ASF licenses this file to You under the Apache License, Version 2.0 (the 
+	"License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
+	WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations 
+	under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>alfresco</artifactId>
+	<name>Alfresco Repository and Explorer Client</name>
+	<packaging>war</packaging>
+	<description>Alfresco Repository and Explorer Client</description>
+
+	<parent>
+		<groupId>org.zaizi</groupId>
+		<artifactId>fivestart</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<properties>
+		<rpm.active>true</rpm.active>
+		<app.properties.folder>src/main/run/properties/${env}</app.properties.folder>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>${alfresco.groupId}</groupId>
+			<artifactId>alfresco</artifactId>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>org.zaizi</groupId>
+			<artifactId>fivestart_alfresco_module</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<type>amp</type>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<!-- Here is can control the order of overlay of your (WAR, AMP, etc.) dependencies | NOTE: At least one WAR dependency must be uncompressed 
+						first | NOTE: In order to have a dependency effectively added to the WAR you need to | explicitly mention it in the overlay section. | NOTE: 
+						First-win resource strategy is used by the WAR plugin -->
+					<overlays>
+						<!-- Current project customizations -->
+						<overlay />
+						<!-- The Alfresco WAR -->
+						<overlay>
+							<groupId>${alfresco.groupId}</groupId>
+							<artifactId>alfresco</artifactId>
+							<type>war</type>
+							<!-- To allow inclusion of META-INF -->
+							<excludes />
+						</overlay>
+						<!-- Adding dynamic amp alfresco module REPLACE IT -->
+						<overlay>
+							<groupId>org.zaizi</groupId>
+							<artifactId>fivestart_alfresco_module</artifactId>
+							<type>amp</type>
+						</overlay>
+					</overlays>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<!-- Overrides the run profile to disable securecomms -->
+		<profile>
+			<id>run</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-war-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>prepare-exploded-war</id>
+								<goals>
+									<goal>exploded</goal>
+								</goals>
+								<phase>prepare-package</phase>
+							</execution>
+							<execution>
+								<id>default-war</id>
+								<configuration>
+									<webXml>${project.build.directory}/${project.build.finalName}-nossl/WEB-INF/web.xml</webXml>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- Replaces web.xml where applicable, commenting out the security-constraints -->
+					<plugin>
+						<groupId>com.google.code.maven-replacer-plugin</groupId>
+						<artifactId>replacer</artifactId>
+						<executions>
+							<execution>
+								<id>disable-securecomms</id>
+								<phase>prepare-package</phase>
+								<goals>
+									<goal>replace</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<ignoreErrors>true</ignoreErrors>
+							<file>${project.build.directory}/${project.build.finalName}/WEB-INF/web.xml</file>
+							<outputDir>${project.build.directory}/${project.build.finalName}-nossl/WEB-INF/</outputDir>
+							<preserveDir>false</preserveDir>
+							<replacements>
+								<replacement>
+									<token>&lt;!-- Toggle securecomms placeholder start --&gt;</token>
+									<value>&lt;!--</value>
+								</replacement>
+								<replacement>
+									<token>&lt;!-- Toggle securecomms placeholder end --&gt;</token>
+									<value>--&gt;</value>
+								</replacement>
+							</replacements>
+						</configuration>
+					</plugin>
+
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<version>${maven.buildhelper.version}</version>
+						<executions>
+							<execution>
+								<id>add-env-properties</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>add-resource</goal>
+								</goals>
+								<configuration>
+									<resources>
+										<resource>
+											<directory>${app.properties.folder}</directory>
+											<includes>
+												<include>${app.properties.include}</include>
+											</includes>
+											<filtering>${app.filtering.enabled}</filtering>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>rpm</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>rpm-maven-plugin</artifactId>
+						<version>${maven.plugin.rpm.version}</version>
+						<executions>
+							<execution>
+								<id>rpm-packaging</id>
+								<phase>package</phase>
+								<configuration>
+									<name>${project.artifactId}</name>
+									<group>${project.groupId}</group>
+									<projversion>${project.version}</projversion>
+									<description>${project.description}</description>
+									<release>${rpm.release}</release>
+									<targetOS>${rpm.targetOs}</targetOS>
+									<classifier>noarch</classifier>
+									<copyright>Copyright Zaizi Ltd, All rights reserved</copyright>
+								</configuration>
+								<goals>
+									<goal>attached-rpm</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<mappings>
+								<mapping>
+									<username>tomcat</username>
+									<groupname>tomcat</groupname>
+									<directoryIncluded>false</directoryIncluded>
+									<directory>${rpm.tomcat.path}/webapps</directory>
+									<sources>
+										<source>
+											<location>${project.build.directory}/${project.build.finalName}.war</location>
+											<destination>${project.artifactId}.war</destination>
+										</source>
+									</sources>
+								</mapping>
+								<mapping>
+									<username>tomcat</username>
+									<groupname>tomcat</groupname>
+									<directoryIncluded>false</directoryIncluded>
+									<recurseDirectories>true</recurseDirectories>
+									<directory>${rpm.tomcat.path}/shared</directory>
+									<sources>
+										<source>
+											<location>src/main/shared</location>
+										</source>
+									</sources>
+								</mapping>
+							</mappings>
+							<preinstallScriptlet>
+								<scriptFile>src/main/rpm/preinstallScriptlet.sh</scriptFile>
+							</preinstallScriptlet>
+							<postinstallScriptlet>
+								<scriptFile>src/main/rpm/postinstallScriptlet.sh</scriptFile>
+							</postinstallScriptlet>
+							<preremoveScriptlet>
+								<scriptFile>src/main/rpm/preremoveScriptlet.sh</scriptFile>
+							</preremoveScriptlet>
+							<postremoveScriptlet>
+								<scriptFile>src/main/rpm/postremoveScriptlet.sh</scriptFile>
+							</postremoveScriptlet>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

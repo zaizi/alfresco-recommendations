@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.zaizi.mahout</groupId>
+	<artifactId>zaizi-mahout</artifactId>
+	<packaging>pom</packaging>
+	<version>1.0-SNAPSHOT</version>
+
+	<name>Mahout Tools - Parent</name>
+
+	<modules>
+		<module>zaizi-mahout-core</module>
+		<module>zaizi-alfresco-mahout</module>
+	</modules>
+
+	<properties>
+		<mahout.version>0.5</mahout.version>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>alfresco</id>
+			<url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
+		</repository>
+		<repository>
+			<id>alfresco-snapshots</id>
+			<url>https://artifacts.alfresco.com/nexus/content/groups/public-snapshots</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.mahout</groupId>
+			<artifactId>mahout-core</artifactId>
+			<version>${mahout.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.15</version>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>com.sun.jdmk</groupId>
+					<artifactId>jmxtools</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jmx</groupId>
+					<artifactId>jmxri</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.jms</groupId>
+					<artifactId>jms</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<verbose>true</verbose>
+					<fork>true</fork>
+					<compilerVersion>1.6</compilerVersion>
+				</configuration>
+			</plugin>
+			<!-- IMPORTANT: Be careful because add the header license at the first line inside javascript files (server side) with
+			imports, broken the file. -->
+			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<header>LICENSE.txt</header>
+					<properties>
+						<owner>Zaizi</owner>
+						<year>${project.inceptionYear}</year>
+						<email>zaizi@zaizi.com</email>
+					</properties>
+					<excludes>
+						<exclude>**/pom.xml</exclude>
+						<exclude>**/README</exclude>
+						<exclude>**/LICENSE.txt</exclude>
+						<exclude>**/*.js</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<!-- Deployment repositories -->
+	<distributionManagement>
+		<repository>
+			<id>zaizi-releases</id>
+			<name>Zaizi Releases</name>
+			<url>https://maven.zaizi.com/content/repositories/zaizi-community-releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>zaizi-snapshots</id>
+			<name>Zaizi Snapshots</name>
+			<url>https://maven.zaizi.com/content/repositories/zaizi-community-snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+</project>

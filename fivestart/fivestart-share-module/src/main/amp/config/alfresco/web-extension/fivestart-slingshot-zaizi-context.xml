@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+
+<beans>
+
+	<!-- This is the custom Spring bean configuration file for Alfresco Share. 
+		Here you can add your spring beans, override the Web Script search path, 
+		override template and script search path, add message property files etc -->
+
+	<bean id="webscripts.resources" class="org.alfresco.i18n.ResourceBundleBootstrapComponent">
+		<property name="resourceBundles">
+			<list>
+				<value>webscripts.messages.webscripts</value>
+				<value>alfresco.messages.common</value>
+				<value>alfresco.messages.slingshot</value>
+				<value>alfresco.web-extension.messages.MetaversantRatings</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="zaizi.evaluator.doclib.metadata.isRatingable" class="org.zaizi.alfresco.evaluator.RatingableEvaluator">
+	</bean>
+
+</beans>
+

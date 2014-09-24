@@ -1,0 +1,31 @@
+<alfresco-config>
+
+	<!-- Document Library config section -->
+	<config evaluator="string-compare" condition="DocumentLibrary">
+
+		<!-- Metadata template -->
+		<metadata-templates>
+			<template id="default">
+				<line index="0" id="fivestar"
+					evaluator="zaizi.evaluator.doclib.metadata.isRatingable">{fivestar}</line>
+			</template>
+		</metadata-templates>
+
+		<!-- Aspects -->
+		<aspects>
+			<!-- Aspects that a user can see -->
+			<visible>
+				<aspect name="mr:rateable" />
+			</visible>
+
+			<!-- Aspects that a user can add. Same as "visible" if left empty -->
+			<addable>
+			</addable>
+
+			<!-- Aspects that a user can remove. Same as "visible" if left empty -->
+			<removeable>
+			</removeable>
+		</aspects>
+	</config>
+
+</alfresco-config>

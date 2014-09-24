@@ -1,0 +1,30 @@
+.rating-label {
+    float: left;
+}
+
+.viewmode-field .rating {
+	visibility: hidden;
+}
+
+.item .rating {
+	visibility: hidden;
+    float: left;
+    margin-left: 10px;
+}
+
+.details .rating {
+	visibility: hidden;
+    float: left;
+    margin-left: 10px;
+}
+
+.detail .rating {
+	visibility: hidden;
+    float: left;
+    margin-left: 10px;
+}
+
+.rating-count {
+    float: left;
+    margin-left: 10px;
+}

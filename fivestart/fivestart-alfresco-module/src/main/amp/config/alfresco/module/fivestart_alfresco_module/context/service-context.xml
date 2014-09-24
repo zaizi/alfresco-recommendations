@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org.zaizi.alfresco.alfresco/dtd/spring-beans.dtd'>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	You under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org.zaizi.alfresco.alfresco/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<beans>
+
+
+
+	<bean id="MetaversantRatingService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces">
+			<list>
+				<value>org.zaizi.metaversant.alfresco.service.RatingService</value>
+			</list>
+		</property>
+		<property name="target">
+			<ref bean="metaversantRatingServiceImpl" />
+		</property>
+
+		<property name="interceptorNames">
+			<list>
+				<idref local="MetaversantRatingService_transaction" />
+				<idref local="MetaversantRatingService_security" />
+			</list>
+		</property>
+
+	</bean>
+
+	<bean id="MetaversantRatingService_transaction"
+		class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="delete*">${server.transaction.mode.default}</prop>
+				<prop key="get*">${server.transaction.mode.readOnly}</prop>
+				<prop key="has*">${server.transaction.mode.readOnly}</prop>
+				<prop key="rate*">${server.transaction.mode.default}</prop>
+				<prop key="*">${server.transaction.mode.default}</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="MetaversantRatingService_security"
+		class="net.sf.acegisecurity.intercept.method.aopalliance.MethodSecurityInterceptor">
+		<property name="authenticationManager">
+			<ref bean="authenticationManager" />
+		</property>
+		<property name="accessDecisionManager">
+			<ref bean="accessDecisionManager" />
+		</property>
+		<property name="afterInvocationManager">
+			<ref bean="afterInvocationManager" />
+		</property>
+		<property name="objectDefinitionSource">
+			<value>
+				org.zaizi.metaversant.alfresco.service.RatingService.hasRatings=ACL_ALLOW
+				org.zaizi.metaversant.alfresco.service.RatingService.rate=ACL_ALLOW
+				org.zaizi.metaversant.alfresco.service.RatingService.deleteRatings=ACL_METHOD.ROLE_ADMINISTRATOR
+				org.zaizi.metaversant.alfresco.service.RatingService.getRatingData=ACL_ALLOW
+				org.zaizi.metaversant.alfresco.service.RatingService.getUserRating=ACL_ALLOW
+			</value>
+		</property>
+	</bean>
+
+	<bean id="metaversantRatingServiceImpl"
+		class="org.zaizi.metaversant.alfresco.service.RatingServiceImpl">
+		<property name="nodeService">
+			<ref bean="NodeService" />
+		</property>
+	</bean>
+
+</beans>

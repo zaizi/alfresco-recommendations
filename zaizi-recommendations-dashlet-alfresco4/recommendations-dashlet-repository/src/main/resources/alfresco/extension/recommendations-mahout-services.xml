@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Alfresco Content Recommendation. Copyright (C) 2014 Zaizi Limited.
+
+    ——————-
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
+    ———————
+
+-->
+<beans
+        default-destroy-method="destroy"
+        default-init-method="afterPropertiesSet"
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+        >
+
+
+    <!-- ALFRESCO CONFIGURATION -->
+
+    <!-- Datamodel
+         Datamodel extractor
+     -->
+    <bean id="dataModel" class="org.zaizi.mahout.alfresco.datamodel.MetaversantDataModelImpl"/>
+
+<!--     <bean id="dataModel" class="org.zaizi.mahout.alfresco.datamodel.AlfrescoDataModelImpl"/> -->
+
+    <!-- Recommender
+         Established configuration (once tested against data)
+    -->
+    <bean id="recommenderService" class="org.zaizi.mahout.alfresco.recommender.AlfrescoRecommendationServiceImpl">
+        <property name="configuration" ref="configuration_SO_1"/>
+        <property name="dataModel" ref="dataModel"/>
+    </bean>
+
+
+    <!-- Recommender with best score
+        Tests all configurations and uses the best scored one.
+    -->
+    <bean id="recommenderService_2" class="org.zaizi.mahout.alfresco.recommender.AlfrescoBestRecommenderServiceImpl">
+        <property name="dataModel" ref="dataModel"/>
+        <property name="evaluatorEngine" ref="evaluator"/>
+    </bean>
+
+    <!-- Recommender Factory
+       Constructs recommenders
+    -->
+    <bean id="recommenderFactory" class="org.zaizi.mahout.recommendation.RecommendationFactory">
+    </bean>
+
+    <!-- SIMILARITY ALGORITHMS -->
+
+    <bean id="pearsonSimilarity" class="org.zaizi.mahout.config.ClassNameSimilarityConfiguration">
+         <property name="similarityClassName"
+                   value="org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity"/>
+    </bean>
+
+    <bean id="logLikelihoodSimilarity" class="org.zaizi.mahout.config.ClassNameSimilarityConfiguration">
+         <property name="similarityClassName"
+                   value="org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity"/>
+    </bean>
+
+    <bean id="euclideanDistanceSimilarity" class="org.zaizi.mahout.config.ClassNameSimilarityConfiguration">
+         <property name="similarityClassName"
+                   value="org.apache.mahout.cf.taste.impl.similarity.EuclideanDistanceSimilarity"/>
+    </bean>
+
+    <bean id="spearmanCorrelationSimilarity" class="org.zaizi.mahout.config.ClassNameSimilarityConfiguration">
+         <property name="similarityClassName"
+                   value="org.apache.mahout.cf.taste.impl.similarity.SpearmanCorrelationSimilarity"/>
+    </bean>
+
+    <bean id="tanimotoCoefficentSimilarity" class="org.zaizi.mahout.config.ClassNameSimilarityConfiguration">
+         <property name="similarityClassName"
+                   value="org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity"/>
+    </bean>
+
+    <bean id="uncenteredCosineSimilarity" class="org.zaizi.mahout.config.ClassNameSimilarityConfiguration">
+         <property name="similarityClassName"
+                   value="org.apache.mahout.cf.taste.impl.similarity.UncenteredCosineSimilarity"/>
+    </bean>
+
+    <bean id="cityBlockSimilarity" class="org.zaizi.mahout.config.ClassNameSimilarityConfiguration">
+         <property name="similarityClassName"
+                   value="org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity"/>
+    </bean>
+
+
+    <!-- NEIGHBORHOODS -->
+
+
+    <bean id="nearestNeighborhoodConfiguration" class="org.zaizi.mahout.config.ClassNameNeighborHoodConfiguration">
+        <property name="neighborHoodClassName"
+                  value="org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood"/>
+        <!--
+        <property name="minSimilarity" value="-999999.9"/>
+        <property name="neighborhoodSize" value="10"/>
+        <property name="samplingRate" value="0.8"/>
+        -->
+    </bean>
+
+    <bean id="thresholdNeighborhoodConfiguration" class="org.zaizi.mahout.config.ClassNameNeighborHoodConfiguration">
+        <property name="neighborHoodClassName"
+                  value="org.apache.mahout.cf.taste.impl.neighborhood.ThresholdUserNeighborhood"/>
+        <!--
+        <property name="threshold" value="0.8"/>
+        <property name="samplingRate" value="0.8"/>
+        -->
+    </bean>
+
+
+    <!-- SLOPE ONE-->
+    <bean id="configuration_SO_1" class="org.zaizi.mahout.config.SlopeOneConfiguration"/>
+
+
+    <!-- ITEM BASED -->
+
+    <bean id="configuration_I_1" class="org.zaizi.mahout.config.ItemBasedConfiguration">
+        <property name="itemSimilarityConfiguration" ref="pearsonSimilarity"/>
+        <property name="ratingScheme" value="SCORE_PREF"/>
+    </bean>
+
+    <bean id="configuration_I_2" class="org.zaizi.mahout.config.ItemBasedConfiguration">
+        <property name="itemSimilarityConfiguration" ref="logLikelihoodSimilarity"/>
+        <property name="ratingScheme" value="SCORE_PREF"/>
+    </bean>
+
+    <bean id="configuration_I_3" class="org.zaizi.mahout.config.ItemBasedConfiguration">
+        <property name="itemSimilarityConfiguration" ref="euclideanDistanceSimilarity"/>
+        <property name="ratingScheme" value="SCORE_PREF"/>
+    </bean>
+
+    <bean id="configuration_I_4" class="org.zaizi.mahout.config.ItemBasedConfiguration">
+        <property name="itemSimilarityConfiguration" ref="tanimotoCoefficentSimilarity"/>
+        <property name="ratingScheme" value="SCORE_PREF"/>
+    </bean>
+
+    <bean id="configuration_I_5" class="org.zaizi.mahout.config.ItemBasedConfiguration">
+        <property name="itemSimilarityConfiguration" ref="uncenteredCosineSimilarity"/>
+        <property name="ratingScheme" value="SCORE_PREF"/>
+    </bean>
+
+    <bean id="configuration_I_6" class="org.zaizi.mahout.config.ItemBasedConfiguration">
+        <property name="itemSimilarityConfiguration" ref="cityBlockSimilarity"/>
+        <property name="ratingScheme" value="SCORE_PREF"/>
+    </bean>
+
+
+
+    <!-- USER BASED -->
+
+    <bean id="configuration_U_1"
+          class="org.zaizi.mahout.config.UserBasedConfiguration">
+        <property name="neighborhoodConfiguration" ref="nearestNeighborhoodConfiguration"/>
+        <property name="ratingScheme" value="SCORE_PREF"/>
+        <property name="userSimilarityConfiguration" ref="pearsonSimilarity"/>
+    </bean>
+
+    <bean id="configuration_U_2"
+          class="org.zaizi.mahout.config.UserBasedConfiguration">
+        <property name="neighborhoodConfiguration" ref="nearestNeighborhoodConfiguration"/>
+        <property name="ratingScheme" value="SCORE_PREF"/>
+        <property name="userSimilarityConfiguration" ref="logLikelihoodSimilarity"/>
+    </bean>
+
+    <bean id="configuration_U_3"
+          class="org.zaizi.mahout.config.UserBasedConfiguration">
+        <property name="neighborhoodConfiguration" ref="nearestNeighborhoodConfiguration"/>
+        <property name="ratingScheme" value="SCORE_PREF"/>
+        <property name="userSimilarityConfiguration" ref="euclideanDistanceSimilarity"/>
+    </bean>
+
+    <bean id="configuration_U_4"
+          class="org.zaizi.mahout.config.UserBasedConfiguration">
+        <property name="neighborhoodConfiguration" ref="nearestNeighborhoodConfiguration"/>
+        <property name="ratingScheme" value="SCORE_PREF"/>
+        <property name="userSimilarityConfiguration" ref="spearmanCorrelationSimilarity"/>
+    </bean>
+
+    <bean id="configuration_U_5"
+          class="org.zaizi.mahout.config.UserBasedConfiguration">
+        <property name="neighborhoodConfiguration" ref="nearestNeighborhoodConfiguration"/>
+        <property name="ratingScheme" value="SCORE_PREF"/>
+        <property name="userSimilarityConfiguration" ref="tanimotoCoefficentSimilarity"/>
+    </bean>
+
+    <bean id="configuration_U_6"
+          class="org.zaizi.mahout.config.UserBasedConfiguration">
+        <property name="neighborhoodConfiguration" ref="nearestNeighborhoodConfiguration"/>
+        <property name="ratingScheme" value="SCORE_PREF"/>
+        <property name="userSimilarityConfiguration" ref="uncenteredCosineSimilarity"/>
+    </bean>
+
+    <bean id="configuration_U_7"
+          class="org.zaizi.mahout.config.UserBasedConfiguration">
+        <property name="neighborhoodConfiguration" ref="nearestNeighborhoodConfiguration"/>
+        <property name="ratingScheme" value="SCORE_PREF"/>
+        <property name="userSimilarityConfiguration" ref="cityBlockSimilarity"/>
+    </bean>
+
+
+    <bean id="evaluator" class="org.zaizi.mahout.eval.EvaluatorEngine">
+        <property name="configurations">
+            <list>
+<!--                 <ref bean="configuration_U_1"/> -->
+                <ref bean="configuration_U_2"/>
+<!--                 <ref bean="configuration_U_3"/> -->
+<!--                 <ref bean="configuration_U_4"/> -->
+<!--                 <ref bean="configuration_U_5"/> -->
+<!--                 <ref bean="configuration_U_6"/> -->
+<!--                 <ref bean="configuration_U_7"/> -->
+<!--                 <ref bean="configuration_I_1"/> -->
+<!--                 <ref bean="configuration_I_2"/> -->
+<!--                 <ref bean="configuration_I_3"/> -->
+<!--                 <ref bean="configuration_I_4"/> -->
+<!--                 <ref bean="configuration_I_5"/> -->
+<!--                 <ref bean="configuration_I_6"/> -->
+<!--                 <ref bean="configuration_SO_1"/> -->
+            </list>
+        </property>
+		<property name="recommenderEvaluator" ref="ratingRMSEvaluator"></property>
+	</bean>
+
+
+   <bean id="ratingRMSEvaluator" class="org.zaizi.mahout.eval.RatingMahoutEvaluator">
+   		<property name="recommenderEvaluator" ref="RMSRecommenderEvaluator"/>
+   		<property name="evaluationPercentage" value="1.0"/>
+   		<property name="trainingPercentage" value="0.7"/>
+   </bean>
+   
+    <bean id="RMSRecommenderEvaluator"
+          class="org.apache.mahout.cf.taste.impl.eval.RMSRecommenderEvaluator"/>
+</beans>

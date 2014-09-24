@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.zaizi.alfresco</groupId>
+	<artifactId>zaizi-recommendations-dashlet</artifactId>
+	<packaging>pom</packaging>
+	<version>1.0</version>
+	<name>Alfresco Recommendations Module - Mahout Integration and Visualization Dashlet </name>
+	<description>Alfresco Mahout Integration
+        Services on repository for recommendations over user.
+        Visualization dashlet on share for see recommended documents.
+    </description>
+	<modules>
+		<module>recommendations-dashlet-repository</module>
+		<module>recommendations-dashlet-share</module>
+	</modules>
+
+	<properties>
+		<!-- Dependencies -->
+		<alfresco.version>4.2.f</alfresco.version>
+		<spring.version>3.0.0.RELEASE</spring.version>
+		<spring.webscripts.version>1.2.0-SNAPSHOT</spring.webscripts.version>
+		<mahout.version>0.5</mahout.version>
+		<log4j.version>1.2.16</log4j.version>
+		
+		<!-- Zaizi dependencies -->
+		<zaizi.mahout.alfresco.version>1.0-SNAPSHOT</zaizi.mahout.alfresco.version>
+		<zaizi.mahout.core.version>1.0-SNAPSHOT</zaizi.mahout.core.version>
+
+		<!-- Maven plugins -->
+		<maven.plugin.amp.version>3.0.4</maven.plugin.amp.version>
+		<maven.plugin.compiler.version>2.3.2</maven.plugin.compiler.version>
+		<maven.plugin.nosnapshot.version>0.0.6</maven.plugin.nosnapshot.version>
+
+		<!-- Some properties -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>alfresco</id>
+			<url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
+		</repository>
+		<repository>
+			<id>alfresco-snapshots</id>
+			<url>https://artifacts.alfresco.com/nexus/content/groups/public-snapshots</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>alfresco</id>
+			<url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>alfresco-snapshots</id>
+			<url>https://artifacts.alfresco.com/nexus/content/groups/public-snapshots</url>
+		</pluginRepository>
+	</pluginRepositories>
+	
+	<build>
+		<plugins>
+			<!-- IMPORTANT: Be careful because add the header license at the first line inside javascript files (server side) with
+			imports, broken the file. -->
+			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<header>LICENSE.txt</header>
+					<properties>
+						<owner>Zaizi</owner>
+						<year>${project.inceptionYear}</year>
+						<email>zaizi@zaizi.com</email>
+					</properties>
+					<excludes>
+						<exclude>**/pom.xml</exclude>
+						<exclude>**/README</exclude>
+						<exclude>**/LICENSE.txt</exclude>
+						<exclude>**/*.js</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+
+
+
+</project>

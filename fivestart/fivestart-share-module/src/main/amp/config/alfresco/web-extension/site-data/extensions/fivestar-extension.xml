@@ -1,0 +1,59 @@
+<extension>
+	<modules>
+		<module>
+			<id>FiveStar extension</id>
+			<auto-deploy>true</auto-deploy>
+			<components>
+				<component>
+					<scope>template</scope>
+					<region-id>documentlist_v2</region-id>
+					<source-id>repository</source-id>
+					<sub-components>
+						<sub-component id="fivestar-repository-extension"
+							index="100">
+							<url>/zaizi/metaversant/documentlist/fivestar</url>
+						</sub-component>
+					</sub-components>
+				</component>
+				<component>
+					<scope>template</scope>
+					<region-id>documentlist_v2</region-id>
+					<source-id>documentlibrary</source-id>
+					<sub-components>
+						<sub-component id="fivestar-documentlibrary-extension"
+							index="100">
+							<url>/zaizi/metaversant/documentlist/fivestar</url>
+						</sub-component>
+					</sub-components>
+				</component>
+				<component>
+					<scope>template</scope>
+					<region-id>document-metadata</region-id>
+					<source-id>document-details</source-id>
+					<sub-components>
+						<sub-component id="fivestar-document-details-extension"
+							index="100">
+							<url>/zaizi/metaversant/documentdetails/fivestar</url>
+						</sub-component>
+					</sub-components>
+				</component>
+<!-- 				<component> -->
+<!-- 					<scope>page</scope> -->
+<!-- 					<region-id>search</region-id> -->
+<!-- 					<source-id>search</source-id> -->
+<!-- 					<sub-components> -->
+<!-- 						<sub-component id="fivestar-search-extension" -->
+<!-- 							index="100"> -->
+<!-- 							<url>/zaizi/metaversant/search/fivestar</url> -->
+<!-- 						</sub-component> -->
+<!-- 					</sub-components> -->
+<!-- 				</component> -->
+			</components>
+
+			<!-- Not working as i expected, review it <customizations> <customization> 
+				<targetPackageRoot>org.zaizi.metaversant</targetPackageRoot> <dependencies> 
+				<css>/res/extension/css/metaversant-ratings.css</css> <js>/res/extension/js/metaversant-ratings.js</js> 
+				</dependencies> </customization> </customizations> -->
+		</module>
+	</modules>
+</extension>

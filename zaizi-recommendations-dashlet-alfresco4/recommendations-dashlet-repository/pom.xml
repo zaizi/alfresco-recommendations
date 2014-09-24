@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>recommendations-dashlet-repository</artifactId>
+	<name>Alfresco Recommendations Module - Repository Services </name>
+	<description>Alfresco Mahout Integration
+        Services on repository for recommendations over user.
+    </description>
+	<packaging>amp</packaging>
+
+	<parent>
+		<artifactId>zaizi-recommendations-dashlet</artifactId>
+		<groupId>org.zaizi.alfresco</groupId>
+		<version>1.0</version>
+	</parent>
+
+	<organization>
+		<name>Zaizi Ltd.</name>
+		<url>http://www.zaizi.com</url>
+	</organization>
+
+	<dependencies>
+
+		<!-- Spring Surf -->
+		<dependency>
+			<groupId>org.springframework.extensions.surf</groupId>
+			<artifactId>spring-webscripts</artifactId>
+			<version>${spring.webscripts.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.extensions.surf</groupId>
+			<artifactId>spring-webscripts</artifactId>
+			<version>${spring.webscripts.version}</version>
+			<classifier>tests</classifier>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.alfresco</groupId>
+			<artifactId>alfresco</artifactId>
+			<version>${alfresco.version}</version>
+			<type>war</type>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.alfresco</groupId>
+			<artifactId>alfresco-data-model</artifactId>
+			<version>${alfresco.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.alfresco</groupId>
+			<artifactId>alfresco-repository</artifactId>
+			<version>${alfresco.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.mahout</groupId>
+			<artifactId>mahout-core</artifactId>
+			<version>${mahout.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.zaizi.mahout</groupId>
+			<artifactId>zaizi-mahout-alfresco</artifactId>
+			<version>${zaizi.mahout.alfresco.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.zaizi.mahout</groupId>
+			<artifactId>zaizi-mahout-core</artifactId>
+			<version>${zaizi.mahout.core.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+	</dependencies>
+	<build>
+		<finalName>${project.artifactId}-${project.version}</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-nosnapshot-plugin</artifactId>
+				<groupId>com.sourcesense.maven</groupId>
+				<version>${maven.plugin.nosnapshot.version}</version>
+				<executions>
+					<execution>
+						<id>default</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>strip</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.plugin.compiler.version}</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.alfresco.maven.plugin</groupId>
+				<artifactId>maven-amp-plugin</artifactId>
+				<version>${maven.plugin.amp.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+					</archive>
+					<overlays>
+					</overlays>
+				</configuration>
+			</plugin>
+		</plugins>
+		<!-- Copies and filters resources in build folder so maven-amp-plugin can 
+			pick them up -->
+		<resources>
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>**README-*</exclude>
+				</excludes>
+			</resource>
+			<!-- Copies and filters AMP config in the proper package 'alfresco/module/alfresco-ranking-module' 
+				so to enforce full module naming single sourcing from POM properties -->
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/config</directory>
+				<targetPath>alfresco/module/${project.artifactId}</targetPath>
+				<excludes>
+					<exclude>**README-*</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											com.sourcesense.maven
+										</groupId>
+										<artifactId>
+											maven-nosnapshot-plugin
+										</artifactId>
+										<versionRange>
+											[0.0.5,)
+										</versionRange>
+										<goals>
+											<goal>strip</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.6.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>commons-httpclient</groupId>
+				<artifactId>commons-httpclient</artifactId>
+				<version>3.0.1</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>commons-codec</groupId>
+				<artifactId>commons-codec</artifactId>
+				<version>1.3</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>commons-dbcp</groupId>
+				<artifactId>commons-dbcp</artifactId>
+				<version>1.2.2</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>commons-pool</groupId>
+				<artifactId>commons-pool</artifactId>
+				<version>1.3</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>commons-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+				<version>2.4</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.thoughtworks.xstream</groupId>
+				<artifactId>xstream</artifactId>
+				<version>1.3.1</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.lucene</groupId>
+				<artifactId>lucene-core</artifactId>
+				<version>3.1.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.lucene</groupId>
+				<artifactId>lucene-analyzers</artifactId>
+				<version>3.1.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>commons-collections</groupId>
+				<artifactId>commons-collections</artifactId>
+				<version>3.2.1</version>
+				<scope>provided</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>
