@@ -83,13 +83,13 @@
 						<exclude>**/*.js</exclude>
 					</excludes>
 				</configuration>
-				<executions>
+				<!--<executions>
 					<execution>
 						<goals>
 							<goal>check</goal>
 						</goals>
 					</execution>
-				</executions>
+				</executions>-->
 			</plugin>
 		</plugins>
 	</build>
