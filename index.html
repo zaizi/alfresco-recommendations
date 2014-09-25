@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Alfresco Mahout Integration : Alfresco Mahout">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Alfresco Mahout Integration</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/zaizi/alfresco-recommendations">View on GitHub</a>
+
+          <h1 id="project_title">Alfresco Mahout Integration</h1>
+          <h2 id="project_tagline">Alfresco Mahout</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/zaizi/alfresco-recommendations/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/zaizi/alfresco-recommendations/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="alfresco-recommendations" class="anchor" href="#alfresco-recommendations"><span class="octicon octicon-link"></span></a>alfresco-recommendations</h1>
+
+<p>Installation guide</p>
+
+<p>This project contains three subprojects</p>
+
+<ul>
+<li>fivestar</li>
+<li>zaizi-mahout-alfresco4</li>
+<li>zaizi-recommendations-dashlet-alfresco4</li>
+</ul><p>Fivestar installation</p>
+
+<p>It is a maven project based on alfresco allinone archetype, so you only need to do a mvn clean package to get
+the amps files. If you have any doubt please visit <a href="http://docs.alfresco.com/4.2/tasks/dev-extensions-maven-sdk-tutorials-all-in-one-archetype.html">http://docs.alfresco.com/4.2/tasks/dev-extensions-maven-sdk-tutorials-all-in-one-archetype.html</a>.</p>
+
+<p>Zaizi-mahout-alfresco4 installation</p>
+
+<p>This project has two modules:</p>
+
+<ul>
+<li>zaizi-mahout-core</li>
+<li>zaizi-alfresco-mahout (depends on zaizi-mahout-core)</li>
+</ul><p>Install zaizi-mahout-core before, because it is a dependecy of the zaizi-alfresco-mahout project.
+To install it execute mvn clean isntall.</p>
+
+<p>After that you should install the other module named zaizi-alfresco-mahout. Executing mvn clean isntall.</p>
+
+<p>Zaizi-recommendations-dashlet-alfresco4 installation</p>
+
+<p>This project has two modules:</p>
+
+<ul>
+<li>recommendations-dashlet-repository (depends on zaizi-alfresco-mahout)</li>
+<li>recommendations-dashlet-share</li>
+</ul><p>Execute mvn clean package in the root folder to get both amp files.</p>
+
+<p>Finally you will have the next amp files to install in you Alfresco instance:</p>
+
+<p>Alfresco Amps</p>
+
+<ul>
+<li>fivestart_alfresco_module.amp</li>
+<li>recommendations-dashlet-repository-1.0.amp</li>
+</ul><p>Share Amps</p>
+
+<ul>
+<li>fivestart_share_module.amp</li>
+<li>recommendations-dashlet-share-1.0.amp</li>
+</ul>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Alfresco Mahout Integration maintained by <a href="https://github.com/zaizi">zaizi</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
